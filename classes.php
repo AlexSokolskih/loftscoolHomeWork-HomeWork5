@@ -42,6 +42,12 @@ class Engine{
     public $inJob = false;
     public $distance = 0;
 
+    public function __construct($countHorsePower)
+    {
+        $this->$countHorsePower = $countHorsePower;
+
+    }
+
 
     public function on()
     {
@@ -61,7 +67,7 @@ class Engine{
 
     }
 
-    public function job($distance)
+    public function job($distance, $speed)
     {
         for ($i = 1; $i <= $distance; $i++) {
             $this->distance += 1;
@@ -73,6 +79,9 @@ class Engine{
                 $this->temperature += 5;
             }
 
+            if (($this->countHorsePower * 2) < $speed){
+                throw  new Exception('превышена максимально возможная скорость');
+            }
         }
 
     }

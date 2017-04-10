@@ -7,7 +7,7 @@
  */
 
 require_once 'classes.php';
-$standartEngine = new Engine();
+$standartEngine = new Engine(87);
 $niva = new Niva($standartEngine);
 
 $niva->move(1007,10,'forward');
