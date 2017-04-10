@@ -6,3 +6,9 @@
  * Time: 18:22
  */
 
+require_once 'classes.php';
+$standartEngine = new Engine();
+$niva = new Niva($standartEngine);
+
+$niva->move(1007,10,'forward');
+var_dump($niva);
