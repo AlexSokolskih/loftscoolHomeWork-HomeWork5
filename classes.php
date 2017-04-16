@@ -10,29 +10,30 @@ abstract class Car
 {
     public $engine;
     var $transmission = 0;
-    var $mileage = 0;  //пробег
-
-    abstract public function move($distance, $speed, $trend);
-
-    public function getMileage()
-    {
-        $this->mileage = $this->engine->distance;
-        return $this->engine->mileage;
-
-    }
 
 
-}
-
-class Niva extends Car
-{
-    public function __construct($engine, $transmission)
+    public function __construct(Engine $engine, Transmission $transmission)
     {
         $this->engine = $engine;
         $this->transmission = $transmission;
         $this->mileage = 0;
     }
 
+
+    public function __toString()
+    {
+        $str = 'Движок:' . $this->engine . ' Коробка:' . $this->transmission;
+        return $str;
+    }
+
+
+    //abstract public function move($distance, $speed, $trend);
+
+    public function getMileage()
+    {
+        return $this->engine->mileage;
+
+    }
 
     public function move($distance, $speed, $trend)
     {
@@ -42,10 +43,25 @@ class Niva extends Car
         $this->engine->off();
         $this->transmission->changeGears('neutral');
     }
+
+
+}
+
+class Niva extends Car
+{
+
+}
+
+class Audi extends Car
+{
+
 }
 
 abstract class Transmission
 {
+    const FORWARD = 'forward';
+    const BACK = 'back';
+    const NEUTRAL = 'neutral';
 
     abstract public function changeGears($trend, $speed);
 
@@ -56,7 +72,7 @@ class TransmissionAuto extends Transmission
 {
     public $gears = array('forward' => false, 'back' => false, 'neutral' => true);
 
-    public function changeGears($trend, $speed=0)
+    public function changeGears($trend, $speed = 0)
     {
         switch ($trend) {
             case 'forward':
@@ -85,9 +101,16 @@ class TransmissionAuto extends Transmission
     }
 
 
-    public function getGear()
+    public function __toString()
     {
-        var_dump($this->$gears);
+        $str = " Коробка передач автоматическая ";
+        foreach ($this->gears as $index => $item) {
+            if ($this->gears[$index] === true) {
+                $str .= ' Включена передача: ' . $index;
+            };
+        }
+
+        return $str;
     }
 
 
@@ -97,7 +120,7 @@ class TransmissionManual extends Transmission
 {
     public $gears;
 
-    public function changeGears($trend, $speed=0)
+    public function changeGears($trend, $speed = 0)
     {
         if ($trend == 'forward' and ($speed < 20)) {
             $this->gears = 1;
@@ -108,6 +131,34 @@ class TransmissionManual extends Transmission
         } elseif ($trend == 'neutral') {
             $this->gears = 0;
         }
+    }
+
+
+    public function __toString()
+    {
+        $str = " Коробка передач механическая Включена передача: ";
+        switch ($this->gears) {
+            case 1 :
+                $str .= 'первая';
+                break;
+            case 2 :
+                $str .= 'вторая';
+                break;
+            case 3 :
+                $str .= 'третья';
+                break;
+            case 0 :
+                $str .= 'нейтральная';
+                break;
+            case -1 :
+                $str .= 'задняя';
+                break;
+            default:
+                $str .= 'неизвестная';
+                break;
+        }
+
+        return $str;
     }
 
 }
@@ -122,6 +173,13 @@ class Engine
     {
         $this->countHorsePower = $countHorsePower;
 
+    }
+
+    public function __toString()
+    {
+        $str = 'Параметры двигателя ( Кол-во лошадиных сил: ' . $this->countHorsePower . ' Текущая температура: ' .
+            $this->temperature . ' Пробег: ' . $this->mileage . ' Включен? ' . ($this->inJob ? 'да' : 'нет') . ' Текущая дистанция: ' . $this->distance . ')';
+        return $str;
     }
 
 
